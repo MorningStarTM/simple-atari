@@ -1,27 +1,12 @@
 import pygame
 import random
+from const import *
+from ball import Ball
 
 # Initialize Pygame
 pygame.init()
 
-# Screen dimensions
-SCREEN_WIDTH = 400
-SCREEN_HEIGHT = 400
 
-# Colors
-RICH_BLACK = (10, 10, 10)
-NEON_BLUE = (0, 255, 255)
-WHITE = (255, 255, 255)
-
-# Game settings
-FPS = 60
-OBSTACLE_WIDTH = 50
-OBSTACLE_HEIGHT = 50
-BALL_RADIUS = 20
-BALL_COLOR = WHITE
-BALL_SPEED = 5
-JUMP_HEIGHT = 100
-GROUND_LEVEL = SCREEN_HEIGHT - 100  # 100 units above the bottom
 
 # Initialize the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -42,10 +27,14 @@ class Obstacle:
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
 
+    def get_rect(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
 
 
 def main():
     clock = pygame.time.Clock()
+    ball = Ball()
     obstacles = []
     obstacle_timer = 0
 
@@ -54,6 +43,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    ball.jump()
             
 
         # Fill the screen with rich black color
@@ -63,6 +55,8 @@ def main():
         pygame.draw.line(screen, NEON_BLUE, (0, GROUND_LEVEL), (SCREEN_WIDTH, GROUND_LEVEL), 2)
 
         # Move and draw the ball
+        ball.move()
+        ball.draw(screen)
 
         # Obstacle generation
         if obstacle_timer > 100:
