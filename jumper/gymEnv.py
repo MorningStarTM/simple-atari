@@ -38,3 +38,24 @@ class JumpEnv(gym.Env):
         self.obstacle_timer = 0
         self.done = False
         return self._get_observation()
+    
+    def step(self, action):
+        """Take an action and return the new state, reward, done, and info."""
+        if action == 1:  # Jump
+            self.ball.jump()
+
+        # Update the ball and obstacles
+        self.ball.move()
+        self._update_obstacles()
+
+        # Check for collisions
+        reward = 1
+        if self._check_collision():
+            self.done = True
+            reward = -100  # Negative reward for collision
+        
+        # Return observation, reward, done flag, and info dictionary
+        observation = self._get_observation()
+        return observation, reward, self.done, {}
+    
+    
