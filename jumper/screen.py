@@ -2,6 +2,7 @@ import pygame
 import random
 from const import *
 from ball import Ball
+import numpy as np
 
 # Initialize Pygame
 pygame.init()
@@ -20,9 +21,10 @@ class Obstacle:
         self.width = OBSTACLE_WIDTH
         self.height = OBSTACLE_HEIGHT
         self.color = NEON_BLUE
+        self.speed = 5
 
     def move(self):
-        self.x -= BALL_SPEED
+        self.x -= self.speed
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
@@ -34,15 +36,35 @@ class Obstacle:
 def check_collision(ball, obstacle):
     return ball.get_rect().colliderect(obstacle.get_rect())
 
+def get_screen_observation():
+    screen_array = pygame.surfarray.array3d(screen)
+    screen_array = np.transpose(screen_array, (1, 0, 2))  # Convert from (width, height, color) to (height, width, color)
+    return screen_array
+
+
+def save_observation(observation, filename="observation.npy"):
+    """
+    Saves the given observation as a NumPy array file.
+
+    Parameters:
+    - observation: The NumPy array containing the observation to save.
+    - filename: The name of the file to save the observation to. Defaults to "observation.npy".
+    """
+    np.save(filename, observation)
+    print(f"Observation saved to {filename}")
+
+
 
 def main():
     clock = pygame.time.Clock()
     ball = Ball()
     obstacles = []
     obstacle_timer = 0
+    frame = 0
 
     running = True
     while running:
+        frame += 1
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -81,6 +103,13 @@ def main():
 
         # Update obstacle timer
         obstacle_timer += 1
+
+        
+        # Capture the screen as an observation
+        observation = get_screen_observation()
+        
+        # Print shape of observation to verify (optional)
+        #save_observation(observation)
 
         # Update the display
         pygame.display.flip()
