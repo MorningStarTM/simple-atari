@@ -78,3 +78,13 @@ class JumpEnv(gym.Env):
         pygame.display.flip()
 
     
+    def close(self):
+        """Close the environment."""
+        pygame.quit()
+
+    def _get_observation(self):
+        """Capture the screen and return it as an observation."""
+        screen_array = pygame.surfarray.array3d(self.screen)
+        return np.transpose(screen_array, (1, 0, 2))
+
+    
