@@ -71,6 +71,11 @@ def main():
             obstacle.move()
             obstacle.draw(screen)
 
+        # Check for collision with ball
+            if check_collision(ball, obstacle):
+                running = False  # End the game if collision occurs
+
+
         # Remove obstacles that have gone off the screen
         obstacles = [obstacle for obstacle in obstacles if obstacle.x + obstacle.width > 0]
 
