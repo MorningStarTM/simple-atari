@@ -4,7 +4,8 @@ import numpy as np
 import pygame
 import random
 from const import *
-
+from ball import Ball
+from screen import Obstacle
 
 class JumpEnv(gym.Env):
     def __init__(self):
@@ -29,3 +30,11 @@ class JumpEnv(gym.Env):
         self.done = None
         self.clock = pygame.time.Clock()
 
+
+    def reset(self):
+        """Reset the environment to its initial state."""
+        self.ball = Ball(GROUND_LEVEL, BALL_RADIUS, JUMP_HEIGHT)
+        self.obstacles = []
+        self.obstacle_timer = 0
+        self.done = False
+        return self._get_observation()
