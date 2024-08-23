@@ -5,8 +5,8 @@ import random
 pygame.init()
 
 # Screen dimensions
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 400
+SCREEN_HEIGHT = 400
 
 # Colors
 RICH_BLACK = (10, 10, 10)
@@ -21,6 +21,7 @@ BALL_RADIUS = 20
 BALL_COLOR = WHITE
 BALL_SPEED = 5
 JUMP_HEIGHT = 100
+GROUND_LEVEL = SCREEN_HEIGHT - 100  # 100 units above the bottom
 
 # Initialize the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -30,7 +31,7 @@ pygame.display.set_caption("Ball Jump Game")
 class Obstacle:
     def __init__(self):
         self.x = SCREEN_WIDTH
-        self.y = SCREEN_HEIGHT - OBSTACLE_HEIGHT
+        self.y = GROUND_LEVEL - OBSTACLE_HEIGHT
         self.width = OBSTACLE_WIDTH
         self.height = OBSTACLE_HEIGHT
         self.color = NEON_BLUE
@@ -40,3 +41,52 @@ class Obstacle:
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
+
+
+
+def main():
+    clock = pygame.time.Clock()
+    obstacles = []
+    obstacle_timer = 0
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            
+
+        # Fill the screen with rich black color
+        screen.fill(RICH_BLACK)
+
+        # Draw the ground line
+        pygame.draw.line(screen, NEON_BLUE, (0, GROUND_LEVEL), (SCREEN_WIDTH, GROUND_LEVEL), 2)
+
+        # Move and draw the ball
+
+        # Obstacle generation
+        if obstacle_timer > 100:
+            obstacles.append(Obstacle())
+            obstacle_timer = 0
+
+        # Move and draw obstacles
+        for obstacle in obstacles:
+            obstacle.move()
+            obstacle.draw(screen)
+
+        # Remove obstacles that have gone off the screen
+        obstacles = [obstacle for obstacle in obstacles if obstacle.x + obstacle.width > 0]
+
+        # Update obstacle timer
+        obstacle_timer += 1
+
+        # Update the display
+        pygame.display.flip()
+
+        # Cap the frame rate
+        clock.tick(FPS)
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
