@@ -3,16 +3,34 @@ from gym import spaces
 import numpy as np
 import pygame
 import random
-from const import *
-from ball import Ball
-from screen import Obstacle
+from .const import *
+from .ball import GymBall
+
+
+class Obstacle:
+    def __init__(self, screen_width, ground_level, width, height, color):
+        self.x = screen_width
+        self.y = ground_level - height
+        self.width = width
+        self.height = height
+        self.color = color
+
+    def move(self, speed):
+        self.x -= speed
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, (self.x, self.y, self.width, self.height))
+
+    def get_rect(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+    
 
 class JumpEnv(gym.Env):
     def __init__(self):
         super(JumpEnv, self).__init__()
 
         pygame.init()
-        self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Ball Jump Game")
 
         # Define action space: 0 - Do nothing, 1 - Jump
@@ -20,7 +38,7 @@ class JumpEnv(gym.Env):
 
         # Define observation space: RGB image of the screen
         self.observation_space = spaces.Box(
-            low=0, high=255, shape=(self.SCREEN_HEIGHT, self.SCREEN_WIDTH, 3), dtype=np.uint8
+            low=0, high=255, shape=(SCREEN_HEIGHT, SCREEN_WIDTH, 3), dtype=np.uint8
         )
 
         # Internal state
@@ -33,7 +51,7 @@ class JumpEnv(gym.Env):
 
     def reset(self):
         """Reset the environment to its initial state."""
-        self.ball = Ball(GROUND_LEVEL, BALL_RADIUS, JUMP_HEIGHT)
+        self.ball = GymBall(GROUND_LEVEL, BALL_RADIUS, JUMP_HEIGHT)
         self.obstacles = []
         self.obstacle_timer = 0
         self.done = False
@@ -98,12 +116,12 @@ class JumpEnv(gym.Env):
     def _update_obstacles(self):
         """Update obstacles and generate new ones."""
         if self.obstacle_timer > 100:
-            self.obstacles.append(Obstacle(self.SCREEN_WIDTH, self.GROUND_LEVEL, self.OBSTACLE_WIDTH, self.OBSTACLE_HEIGHT, self.NEON_BLUE))
+            self.obstacles.append(Obstacle(SCREEN_WIDTH, GROUND_LEVEL, OBSTACLE_WIDTH, OBSTACLE_HEIGHT, NEON_BLUE))
             self.obstacle_timer = 0
 
         # Move obstacles and remove those that have gone off-screen
         for obstacle in self.obstacles:
-            obstacle.move(self.BALL_SPEED)
+            obstacle.move(BALL_SPEED)
         self.obstacles = [obstacle for obstacle in self.obstacles if obstacle.x + obstacle.width > 0]
         
         # Update obstacle timer
