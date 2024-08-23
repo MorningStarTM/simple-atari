@@ -94,3 +94,17 @@ class JumpEnv(gym.Env):
             if self.ball.get_rect().colliderect(obstacle.get_rect()):
                 return True
         return False
+    
+    def _update_obstacles(self):
+        """Update obstacles and generate new ones."""
+        if self.obstacle_timer > 100:
+            self.obstacles.append(Obstacle(self.SCREEN_WIDTH, self.GROUND_LEVEL, self.OBSTACLE_WIDTH, self.OBSTACLE_HEIGHT, self.NEON_BLUE))
+            self.obstacle_timer = 0
+
+        # Move obstacles and remove those that have gone off-screen
+        for obstacle in self.obstacles:
+            obstacle.move(self.BALL_SPEED)
+        self.obstacles = [obstacle for obstacle in self.obstacles if obstacle.x + obstacle.width > 0]
+        
+        # Update obstacle timer
+        self.obstacle_timer += 1
