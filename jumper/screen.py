@@ -31,6 +31,9 @@ class Obstacle:
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
 
+def check_collision(ball, obstacle):
+    return ball.get_rect().colliderect(obstacle.get_rect())
+
 
 def main():
     clock = pygame.time.Clock()
