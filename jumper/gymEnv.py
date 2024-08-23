@@ -58,4 +58,23 @@ class JumpEnv(gym.Env):
         observation = self._get_observation()
         return observation, reward, self.done, {}
     
+
+    def render(self, mode='human'):
+        """Render the environment."""
+        # Fill the screen with rich black color
+        self.screen.fill(RICH_BLACK)
+
+        # Draw the ground line
+        pygame.draw.line(self.screen, NEON_BLUE, (0, GROUND_LEVEL), (SCREEN_WIDTH, GROUND_LEVEL), 2)
+
+        # Draw the ball
+        self.ball.draw(self.screen)
+
+        # Draw the obstacles
+        for obstacle in self.obstacles:
+            obstacle.draw(self.screen)
+
+        # Update the display
+        pygame.display.flip()
+
     
