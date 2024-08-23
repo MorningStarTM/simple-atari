@@ -88,3 +88,9 @@ class JumpEnv(gym.Env):
         return np.transpose(screen_array, (1, 0, 2))
 
     
+    def _check_collision(self):
+        """Check for collisions between the ball and obstacles."""
+        for obstacle in self.obstacles:
+            if self.ball.get_rect().colliderect(obstacle.get_rect()):
+                return True
+        return False
