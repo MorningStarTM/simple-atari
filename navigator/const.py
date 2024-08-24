@@ -7,7 +7,9 @@ ASTEROID_MAX_SIZE = 100
 BACKGROUND_COLOR = (59, 61, 64)
 ASTEROID_SPEED = 4
 
-JET_SPEED = 3
+JET_SPEED = 2
 BRAKE_SPEED = 3
 
 FPS = 60
+ASTEROID_IMAGES = ["assets\\rock.png", "assets\\asteroid.png"]
+IMAGE = "assets\\fighter-jet.png"
