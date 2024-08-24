@@ -26,9 +26,9 @@ class Jet:
         elif right:
             self.angle -= self.rotation_vel
 
-    def draw(self, win, offset_x, offset_y):
+    def draw(self, win, offset_y):
         # Adjust drawing based on the camera offset
-        draw_x = self.x - offset_x
+        draw_x = self.x - 15
         draw_y = self.y - offset_y
         blit_rotate_center(win, self.img, (draw_x, draw_y), self.angle)
 
@@ -47,6 +47,11 @@ class Jet:
 
         self.y -= vertical
         self.x -= horizontal
+
+        if self.x < 0:
+            self.x = 0
+        elif self.x > SCREEN_WIDTH:
+            self.x = SCREEN_WIDTH
 
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceration / 2, 0)
