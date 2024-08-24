@@ -11,22 +11,20 @@ class GameScreen:
 
         self.asteroids = [
             Asteroid(
-                random.randint(0, SCREEN_WIDTH - ASTEROID_MAX_SIZE),
+                random.randint(0, SCREEN_WIDTH),
                 random.randint(-SCREEN_HEIGHT, 0),
-                random.randint(ASTEROID_MIN_SIZE, ASTEROID_MAX_SIZE)
+                random.choice(ASTEROID_IMAGES)
             ) for _ in range(ASTEROID_COUNT)
         ]
 
-    def update(self):
+    def update(self, offset_x, offset_y):
         self.screen.fill(self.background_color)
         for asteroid in self.asteroids:
-            asteroid.move(ASTEROID_SPEED)
-            asteroid.draw(self.screen)
+            asteroid.move(0)  # Asteroids don't move vertically; they are static in relation to the player
+            asteroid.draw(self.screen, offset_x, offset_y)
 
     def check_collision(self, player_rect):
         for asteroid in self.asteroids:
             if player_rect.colliderect(asteroid.rect):
                 return True
         return False
-
-
