@@ -77,14 +77,13 @@ while running:
 
     # Calculate camera offset based on the jet's position
     jet_x, jet_y = jet.get_position()
-    offset_x = jet_x - SCREEN_WIDTH // 2
     offset_y = jet_y - SCREEN_HEIGHT // 2
 
     # Update and draw the game screen with the camera offsets
-    game_screen.update(offset_x, offset_y)
+    game_screen.update(0, offset_y)
 
     # Draw the jet with the new camera offsets
-    jet.draw(game_screen.screen, offset_x, offset_y)
+    jet.draw(game_screen.screen, offset_y)
 
     # Check for collisions
     
