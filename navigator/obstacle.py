@@ -1,12 +1,12 @@
 import pygame
 import random
-from const import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_IMAGE
+from const import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Asteroid:
     def __init__(self, x, y, image):
         self.x = x
         self.y = y
-        self.image = pygame.image.load(ASTEROID_IMAGE)
+        self.image = pygame.image.load(image)
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def move(self, speed):
