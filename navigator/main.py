@@ -95,6 +95,10 @@ while running:
         print("Collision Detected!")
         running = False  # Handle game over
 
+    if game_screen.check_win(jet_y):
+        print("You Win!")
+        running = False  # Handle win
+
     pygame.display.flip()
     clock.tick(60)
 
