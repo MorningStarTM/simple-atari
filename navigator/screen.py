@@ -104,9 +104,16 @@ class DynamicGameScreen:
             asteroid.move(0)  # Asteroids are static in relation to the player
             asteroid.draw(self.screen, offset_x, offset_y)
 
-    def check_collision(self, player_rect):
+    def check_collision(self, player_rect, player_mask):
         for asteroid in self.asteroids:
-            if player_rect.colliderect(asteroid.rect):
+            # Generate the mask for the asteroid
+            asteroid_mask = pygame.mask.from_surface(asteroid.image)
+            asteroid_offset = (asteroid.rect.x - player_rect.x, asteroid.rect.y - player_rect.y)
+
+            # Perform pixel-perfect collision detection
+            overlap = player_mask.overlap(asteroid_mask, asteroid_offset)
+            
+            if overlap:  # If there is an overlap, collision is detected
                 return True
         return False
 
