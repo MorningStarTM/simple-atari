@@ -5,7 +5,7 @@ from const import *
 import math
 from noise import pnoise1
 from scipy.interpolate import interp1d
-
+import numpy as np
 
 def generate_dynamic_path(screen_width, screen_height, num_points=10, path_width=200, noise_scale=0.1):
     # Generate random control points using Perlin noise
@@ -73,10 +73,8 @@ class DynamicGameScreen:
         pygame.display.set_caption("Jet and Asteroids")
         self.background_color = BACKGROUND_COLOR
 
-        # Define initial path boundaries
-        self.path_left_boundary = SCREEN_WIDTH // 3
-        self.path_right_boundary = 2 * SCREEN_WIDTH // 3
-        self.path_width = self.path_right_boundary - self.path_left_boundary
+        # Generate dynamic path
+        self.left_boundary, self.right_boundary, self.path_points = generate_dynamic_path(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         # List to hold asteroid objects
         self.asteroids = []
@@ -86,27 +84,21 @@ class DynamicGameScreen:
         self.asteroids.clear()
         for _ in range(ASTEROID_COUNT):
             x = random.randint(0, SCREEN_WIDTH)
-            y = random.randint(-SCREEN_HEIGHT, 0)
+            y = random.randint(-SCREEN_HEIGHT*4, 0)
             
             # Ensure asteroids are not placed directly on the path
-            if self.path_left_boundary < x < self.path_right_boundary:
-                # Adjust position to be outside the path
-                if random.choice([True, False]):
-                    x = random.randint(0, self.path_left_boundary)
-                else:
-                    x = random.randint(self.path_right_boundary, SCREEN_WIDTH)
-            
-            self.asteroids.append(Asteroid(x, y, random.choice(ASTEROID_IMAGES)))
+            if not self.is_on_path(x, y):
+                self.asteroids.append(Asteroid(x, y, random.choice(ASTEROID_IMAGES)))
+
+    def is_on_path(self, x, y):
+        # Check if a point (x, y) is within the path boundaries
+        for (left_x, left_y), (right_x, right_y) in zip(self.left_boundary, self.right_boundary):
+            if left_y <= y <= right_y and left_x <= x <= right_x:
+                return True
+        return False
 
     def update(self, offset_x, offset_y):
         self.screen.fill(self.background_color)
-
-        # Adjust path dynamically (example of simple sine wave adjustment)
-        self.path_left_boundary += int(math.sin(pygame.time.get_ticks() / 1000.0) * 2)
-        self.path_right_boundary = self.path_left_boundary + self.path_width
-
-        # Regenerate asteroids if needed
-        self.generate_asteroids()
 
         for asteroid in self.asteroids:
             asteroid.move(0)  # Asteroids are static in relation to the player
@@ -117,3 +109,5 @@ class DynamicGameScreen:
             if player_rect.colliderect(asteroid.rect):
                 return True
         return False
+
+
