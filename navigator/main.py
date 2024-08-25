@@ -1,5 +1,5 @@
 import pygame
-from screen import GameScreen
+from screen import GameScreen, DynamicGameScreen
 from const import *
 from jet import Jet
 
@@ -53,7 +53,7 @@ clock = pygame.time.Clock()
 jet = Jet(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
 # Initialize the game screen
-game_screen = GameScreen()
+game_screen = DynamicGameScreen()
 
 running = True
 
@@ -86,7 +86,14 @@ while running:
     jet.draw(game_screen.screen, offset_y)
 
     # Check for collisions
-    
+    jet_mask = pygame.mask.from_surface(jet.img)
+
+    # Get the jet's rect
+    jet_rect = jet.get_rect()
+
+    if game_screen.check_collision(jet.get_rect(), jet_mask):
+        print("Collision Detected!")
+        running = False  # Handle game over
 
     pygame.display.flip()
     clock.tick(60)
