@@ -25,6 +25,20 @@ def generate_dynamic_path(screen_width, screen_height, num_points=10, path_width
 
     return left_boundary, right_boundary, curve_points
 
+
+def generate_bezier_curve(control_points, n_points=100):
+    """Generate a Bézier curve from control points."""
+    n = len(control_points) - 1
+    t = np.linspace(0.0, 1.0, n_points)
+    curve = np.zeros((n_points, 2))
+    for i, (x, y) in enumerate(control_points):
+        binomial_coeff = np.math.comb(n, i)
+        bernstein_poly = binomial_coeff * (t ** i) * ((1 - t) ** (n - i))
+        curve[:, 0] += x * bernstein_poly
+        curve[:, 1] += y * bernstein_poly
+    return curve
+
+
 class GameScreen:
     def __init__(self):
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
