@@ -80,6 +80,9 @@ class DynamicGameScreen:
         self.asteroids = []
         self.generate_asteroids()
 
+        # Define the end line y-coordinate (where the game ends)
+        self.end_line_y = -SCREEN_HEIGHT * 4 + 20
+
     def generate_asteroids(self):
         self.asteroids.clear()
         for _ in range(ASTEROID_COUNT):
@@ -117,4 +120,6 @@ class DynamicGameScreen:
                 return True
         return False
 
-
+    def check_win(self, player_y):
+        # Check if the player's y-position is above the end line
+        return player_y <= self.end_line_y
