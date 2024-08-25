@@ -33,11 +33,11 @@ class Jet:
         blit_rotate_center(win, self.img, (draw_x, draw_y), self.angle)
 
     def move_forward(self):
-        self.vel = min(self.vel + self.acceration, self.max_vel)
+        self.vel = self.max_vel
         self.move()
 
     def move_backward(self):
-        self.vel = max(self.vel - self.acceration, -self.max_vel / 2)
+        self.vel = -2
         self.move()
 
     def move(self):
@@ -59,3 +59,11 @@ class Jet:
 
     def get_position(self):
         return self.x, self.y
+    
+    def get_rect(self):
+        jet_rect = self.img.get_rect(topleft=(self.x-5, self.y-5))
+        rotated_rect = pygame.Rect(jet_rect)
+        rotated_rect.center = jet_rect.center
+        rotated_rect.width -= 7
+        rotated_rect.height -= 7
+        return rotated_rect
