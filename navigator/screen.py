@@ -2,6 +2,28 @@ import pygame
 from obstacle import Asteroid
 import random
 from const import *
+import math
+from noise import pnoise1
+from scipy.interpolate import interp1d
+
+
+def generate_dynamic_path(screen_width, screen_height, num_points=10, path_width=200, noise_scale=0.1):
+    # Generate random control points using Perlin noise
+    control_points = []
+    for i in range(num_points):
+        x = i * (screen_height // num_points)
+        noise_val = pnoise1(i * noise_scale)  # Perlin noise value
+        y = int((screen_width // 2) + noise_val * (screen_width // 3))
+        control_points.append((y, x))
+    
+    # Generate Bézier curve from control points
+    curve_points = generate_bezier_curve(control_points, n_points=500)
+
+    # Define the left and right boundaries of the path
+    left_boundary = [(x - path_width // 2, y) for x, y in curve_points]
+    right_boundary = [(x + path_width // 2, y) for x, y in curve_points]
+
+    return left_boundary, right_boundary, curve_points
 
 class GameScreen:
     def __init__(self):
@@ -21,6 +43,59 @@ class GameScreen:
         self.screen.fill(self.background_color)
         for asteroid in self.asteroids:
             asteroid.move(0)  # Asteroids don't move vertically; they are static in relation to the player
+            asteroid.draw(self.screen, offset_x, offset_y)
+
+    def check_collision(self, player_rect):
+        for asteroid in self.asteroids:
+            if player_rect.colliderect(asteroid.rect):
+                return True
+        return False
+    
+
+
+class DynamicGameScreen:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Jet and Asteroids")
+        self.background_color = BACKGROUND_COLOR
+
+        # Define initial path boundaries
+        self.path_left_boundary = SCREEN_WIDTH // 3
+        self.path_right_boundary = 2 * SCREEN_WIDTH // 3
+        self.path_width = self.path_right_boundary - self.path_left_boundary
+
+        # List to hold asteroid objects
+        self.asteroids = []
+        self.generate_asteroids()
+
+    def generate_asteroids(self):
+        self.asteroids.clear()
+        for _ in range(ASTEROID_COUNT):
+            x = random.randint(0, SCREEN_WIDTH)
+            y = random.randint(-SCREEN_HEIGHT, 0)
+            
+            # Ensure asteroids are not placed directly on the path
+            if self.path_left_boundary < x < self.path_right_boundary:
+                # Adjust position to be outside the path
+                if random.choice([True, False]):
+                    x = random.randint(0, self.path_left_boundary)
+                else:
+                    x = random.randint(self.path_right_boundary, SCREEN_WIDTH)
+            
+            self.asteroids.append(Asteroid(x, y, random.choice(ASTEROID_IMAGES)))
+
+    def update(self, offset_x, offset_y):
+        self.screen.fill(self.background_color)
+
+        # Adjust path dynamically (example of simple sine wave adjustment)
+        self.path_left_boundary += int(math.sin(pygame.time.get_ticks() / 1000.0) * 2)
+        self.path_right_boundary = self.path_left_boundary + self.path_width
+
+        # Regenerate asteroids if needed
+        self.generate_asteroids()
+
+        for asteroid in self.asteroids:
+            asteroid.move(0)  # Asteroids are static in relation to the player
             asteroid.draw(self.screen, offset_x, offset_y)
 
     def check_collision(self, player_rect):
