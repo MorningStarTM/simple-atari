@@ -1,7 +1,7 @@
 import pygame
-from screen import GameScreen, DynamicGameScreen
-from const import *
-from jet import Jet
+from .screen import GameScreen, DynamicGameScreen
+from .const import *
+from .jet import Jet
 
 def main():
     pygame.init()

@@ -1,7 +1,7 @@
 import pygame
-from obstacle import Asteroid
+from .obstacle import Asteroid
 import random
-from const import *
+from .const import *
 import math
 from noise import pnoise1
 from scipy.interpolate import interp1d

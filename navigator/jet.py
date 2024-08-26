@@ -1,6 +1,6 @@
 import pygame
 import math
-from const import *
+from .const import *
 
 
 def blit_rotate_center(win, image, top_left, angle):

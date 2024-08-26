@@ -1,6 +1,6 @@
 import pygame
 import random
-from const import SCREEN_WIDTH, SCREEN_HEIGHT
+from .const import SCREEN_WIDTH, SCREEN_HEIGHT
 
 class Asteroid:
     def __init__(self, x, y, image):
