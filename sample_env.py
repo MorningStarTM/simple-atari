@@ -15,14 +15,16 @@ gym.envs.register(
 env = gym.make('JumpEnv-v0')
 
 for i in range(10):
+    total_reward = 0
 # Reset the environment to start
     observation = env.reset()
-
     # Example loop to take random actions
     done = False
     while not done:
         action = env.action_space.sample()  # Random action
         observation, reward, done, info = env.step(action)
+        total_reward += reward
         env.render()
+    print(f"Reward : {total_reward}")
 
 env.close()
