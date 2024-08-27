@@ -33,15 +33,17 @@ class JetEnv(gym.Env):
 
         # Initial state
         self.state = self.get_state()
+        self.frame = 0
 
     def reset(self):
         # Reset the environment to its initial state
         self.jet = Jet(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         self.game_screen = DynamicGameScreen()
-        self.state = self.get_state()
+        self.state = self._get_observation()
         return self.state
 
     def step(self, action):
+        self.frame += 1
         # Execute one time step within the environment
         if action == 1:
             self.jet.rotate(left=True)
@@ -73,17 +75,22 @@ class JetEnv(gym.Env):
         # Determine reward
         if collision:
             reward = -100  # High penalty for collision
+            self.frame = 0
             done = True
+        
+        # Check if the player has reached the end line
+        elif self.jet.y <= -SCREEN_HEIGHT * 4:
+            reward = 100  # High reward for reaching the end
+            self.frame = 0
+            done = True
+        
+        elif self.frame % 50 == 0:
+            reward = -0.01
+            done = False
         else:
-            reward = 0.1  # Small reward for staying alive
+            reward = 0.001  # Small reward for staying alive
             done = False
 
-        # Check if the player has reached the end line
-        if self.jet.y <= -SCREEN_HEIGHT * 4:
-            reward = 100  # High reward for reaching the end
-            done = True
-
-        self.state = self.get_state()
         return self._get_observation(), reward, done, {}
 
     def render(self, mode='human'):
