@@ -52,6 +52,8 @@ class Jet:
             self.x = 0
         elif self.x > SCREEN_WIDTH:
             self.x = SCREEN_WIDTH
+        elif self.y > SCREEN_HEIGHT:
+            self.y = SCREEN_HEIGHT
 
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceration / 2, 0)
