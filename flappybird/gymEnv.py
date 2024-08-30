@@ -27,3 +27,11 @@ class FlappyBirdEnv(gym.Env):
         self.clock = pygame.time.Clock()
         self.done = False
         self.score = 0
+
+    def reset(self):
+        # Reset game state
+        self.bird = Bird(SCREEN_WIDTH // 4, SCREEN_HEIGHT // 2)
+        self.pipes = [Pipe(SCREEN_WIDTH, SCREEN_HEIGHT, PIPE_GAP)]
+        self.score = 0
+        self.done = False
+        return self._get_observation()
