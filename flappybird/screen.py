@@ -1,7 +1,7 @@
 import pygame
-from obstacle import Obstacle
-from bird import Bird
-from const import * 
+from .obstacle import Obstacle
+from .bird import Bird
+from .const import * 
 
 class GameScreen:
     def __init__(self):

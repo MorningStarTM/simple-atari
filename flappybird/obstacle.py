@@ -1,6 +1,6 @@
 import pygame
 import random
-from const import *
+from .const import *
 
 class Obstacle:
     def __init__(self):

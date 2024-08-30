@@ -13,7 +13,7 @@ PIPE_SPAWN_FREQUENCY = 300
 # Screen settings
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-BACKGROUND_COLOR = (135, 206, 235)  # Light sky blue
+#BACKGROUND_COLOR = (135, 206, 235)  # Light sky blue
 
 # Bird settings
 BIRD_RADIUS = 15
