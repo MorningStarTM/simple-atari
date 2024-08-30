@@ -35,3 +35,9 @@ class FlappyBirdEnv(gym.Env):
         self.score = 0
         self.done = False
         return self._get_observation()
+    
+    def _get_observation(self):
+        # Render the game and return the screen state
+        self.screen.update(self.bird, self.pipes)
+        obs = pygame.surfarray.array3d(pygame.display.get_surface())
+        return np.transpose(obs, (1, 0, 2))  # Transpose to (height, width, channels)
