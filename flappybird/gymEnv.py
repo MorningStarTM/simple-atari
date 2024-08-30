@@ -88,3 +88,18 @@ class FlappyBirdEnv(gym.Env):
                 self.score += 1
         if len(self.pipes) == 0 or self.pipes[-1].x < SCREEN_WIDTH - PIPE_GAP * 1.5:
             self.pipes.append(Pipe(SCREEN_WIDTH, SCREEN_HEIGHT, PIPE_GAP))
+
+
+    def _check_score(self):
+        # Score increases when bird passes through pipes
+        for pipe in self.pipes:
+            if not pipe.passed and pipe.x < self.bird.x:
+                self.score += 1
+                pipe.passed = True
+
+    def render(self, mode="human"):
+        pygame.display.flip()
+        self.clock.tick(60)
+
+    def close(self):
+        pygame.quit()
