@@ -67,3 +67,14 @@ class FlappyBirdEnv(gym.Env):
         observation = self._get_observation()
 
         return observation, reward, self.done, {}
+    
+
+    def _check_collision(self):
+        # Check if bird collides with pipes or ground/ceiling
+        bird_rect = self.bird.get_rect()
+        if bird_rect.top <= 0 or bird_rect.bottom >= SCREEN_HEIGHT:
+            return True
+        for pipe in self.pipes:
+            if bird_rect.colliderect(pipe.get_rect()):
+                return True
+        return False
