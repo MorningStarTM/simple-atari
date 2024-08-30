@@ -78,3 +78,13 @@ class FlappyBirdEnv(gym.Env):
             if bird_rect.colliderect(pipe.get_rect()):
                 return True
         return False
+
+
+    def _handle_pipes(self):
+        # Remove off-screen pipes and generate new ones
+        for pipe in self.pipes:
+            if pipe.is_off_screen():
+                self.pipes.remove(pipe)
+                self.score += 1
+        if len(self.pipes) == 0 or self.pipes[-1].x < SCREEN_WIDTH - PIPE_GAP * 1.5:
+            self.pipes.append(Pipe(SCREEN_WIDTH, SCREEN_HEIGHT, PIPE_GAP))
