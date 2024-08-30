@@ -41,3 +41,29 @@ class FlappyBirdEnv(gym.Env):
         self.screen.update(self.bird, self.pipes)
         obs = pygame.surfarray.array3d(pygame.display.get_surface())
         return np.transpose(obs, (1, 0, 2))  # Transpose to (height, width, channels)
+    
+
+    def step(self, action):
+        # Handle actions: 0 for no action, 1 for flap
+        if action == 1:
+            self.bird.flap()
+
+        # Update bird and pipes
+        self.bird.update()
+        for pipe in self.pipes:
+            pipe.move()
+
+        # Check for collision
+        reward = 1  # Default reward for staying alive
+        if self._check_collision():
+            reward = -100
+            self.done = True
+
+        # Check if pipes go off-screen and generate new pipes
+        self._handle_pipes()
+
+        # Calculate reward and check for game over
+        self._check_score()
+        observation = self._get_observation()
+
+        return observation, reward, self.done, {}
