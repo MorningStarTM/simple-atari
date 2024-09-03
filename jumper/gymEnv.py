@@ -38,7 +38,7 @@ class JumpEnv(gym.Env):
 
         # Define observation space: RGB image of the screen
         self.observation_space = spaces.Box(
-            low=0, high=255, shape=(SCREEN_HEIGHT, SCREEN_WIDTH, 3), dtype=np.uint8
+            low=0, high=255, shape=(64, 64, 3), dtype=np.uint8
         )
 
         # Internal state
@@ -103,7 +103,10 @@ class JumpEnv(gym.Env):
     def _get_observation(self):
         """Capture the screen and return it as an observation."""
         screen_array = pygame.surfarray.array3d(self.screen)
-        return np.transpose(screen_array, (1, 0, 2))
+        obs = np.transpose(screen_array, (1, 0, 2))
+        obs = pygame.surfarray.make_surface(obs)
+        obs = pygame.transform.scale(obs, (64, 64))
+        return pygame.surfarray.array3d(obs)
 
     
     def _check_collision(self):
