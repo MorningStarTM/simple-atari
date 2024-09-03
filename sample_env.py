@@ -5,7 +5,8 @@ from navigator import JetEnv
 from flappybird import FlappyBirdEnv
 import matplotlib.pyplot as plt
 import numpy as np
-
+import warnings
+warnings.filterwarnings("ignore")
 
 def jumpenv():
     # Register your custom environment
@@ -52,7 +53,7 @@ def Jetenv():
             action = env.action_space.sample()  # Random action
             observation, reward, done, info = env.step(action)
             total_reward += reward
-            env.render()
+            #env.render()
         print(f"Reward : {total_reward}")
 
     env.close()
@@ -64,9 +65,9 @@ def Flappyenv():
     )
 
     env = gym.make('FlappyEnv-v0')
-    print(f"Action shape : {env.action_space.n}")
+    print(f"Obs shape : {env.observation_space.shape}")
 
-    for i in range(10):
+    for i in range(3):
         total_reward = 0
     # Reset the environment to start
         observation = env.reset()

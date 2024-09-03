@@ -22,7 +22,7 @@ class FlappyBirdEnv(gym.Env):
         # Define action and observation spaces
         self.action_space = spaces.Discrete(2)  # 0: Do nothing, 1: Flap
         self.observation_space = spaces.Box(
-            low=0, high=255, shape=(SCREEN_WIDTH, SCREEN_HEIGHT, 3), dtype=np.uint8
+            low=0, high=255, shape=(256, 256, 3), dtype=np.uint8
         )
 
         self.clock = pygame.time.Clock()
@@ -42,8 +42,12 @@ class FlappyBirdEnv(gym.Env):
         # Render the game and return the screen state
         self.screen.update()
         obs = pygame.surfarray.array3d(pygame.display.get_surface())
-        return np.transpose(obs, (1, 0, 2))  # Transpose to (height, width, channels)
-
+        obs = np.transpose(obs, (1, 0, 2))  # Convert to (HEIGHT, WIDTH, 3)
+        obs = pygame.surfarray.make_surface(obs)
+        obs = pygame.transform.scale(obs, (256, 256))
+        return pygame.surfarray.array3d(obs)
+    
+    
     def step(self, action):
         # Handle action: 0 for no action, 1 for flap
         if action == 1:
