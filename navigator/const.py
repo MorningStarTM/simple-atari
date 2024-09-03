@@ -1,3 +1,5 @@
+from pathlib import Path
+
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 500
 
@@ -11,5 +13,5 @@ JET_SPEED = 2
 BRAKE_SPEED = 3
 
 FPS = 60
-ASTEROID_IMAGES = ["navigator\\assets\\rock.png", "navigator\\assets\\asteroid.png"]
-IMAGE = "navigator\\assets\\fighter-jet.png"
+ASTEROID_IMAGES = [Path("navigator\\assets\\rock.png"), Path("navigator\\assets\\asteroid.png")]
+IMAGE = Path("navigator\\assets\\fighter-jet.png")
