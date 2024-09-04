@@ -69,3 +69,10 @@ class Invader(gym.Env):
             if pygame.sprite.spritecollide(jet, self.screen.asteroid_group, True):
                 reward -= 10
         return reward
+
+    def _check_done(self):
+        # End the game if the jet collides with an asteroid
+        for jet in self.game.jet_group:
+            if pygame.sprite.spritecollide(jet, self.game.asteroid_group, True):
+                return True
+        return False
