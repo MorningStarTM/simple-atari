@@ -1,9 +1,9 @@
 # screen.py
 import pygame
-from jet import Jet
-from asteroid import Asteroid
-from bullet import Bullet
-from const import *
+from .jet import Jet
+from .asteroid import Asteroid
+from .bullet import Bullet
+from .const import *
 import random
 import sys
 

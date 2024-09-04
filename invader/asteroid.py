@@ -1,7 +1,7 @@
 # asteroid.py
 import pygame
 import random
-from const import *
+from .const import *
 
 class Asteroid(pygame.sprite.Sprite):
     def __init__(self, x, y):

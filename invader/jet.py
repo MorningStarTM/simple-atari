@@ -1,7 +1,7 @@
 # jet.py
 import pygame
-from bullet import Bullet
-from const import *
+from .bullet import Bullet
+from .const import *
 
 class Jet(pygame.sprite.Sprite):
     def __init__(self, x, y):
