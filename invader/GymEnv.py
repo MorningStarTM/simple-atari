@@ -55,3 +55,17 @@ class Invader(gym.Env):
 
         # Return the step information
         return observation, reward, self.done, {}
+    
+
+    def _calculate_reward(self):
+        # Define reward mechanism
+        reward = 0
+        for bullet in self.screen.bullet_group:
+            # If bullet hits an asteroid, give positive reward
+            if pygame.sprite.spritecollide(bullet, self.screen.asteroid_group, True, pygame.sprite.collide_mask):
+                reward += 1
+        # Negative reward if the jet collides with an asteroid
+        for jet in self.screen.jet_group:
+            if pygame.sprite.spritecollide(jet, self.screen.asteroid_group, True):
+                reward -= 10
+        return reward
