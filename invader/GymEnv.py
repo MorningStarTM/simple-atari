@@ -27,7 +27,7 @@ class Invader(gym.Env):
 
     def reset(self):
         # Reset the game to the initial state
-        self.game.__init__()  # Reinitialize to reset game
+        self.screen.__init__()  # Reinitialize to reset game
         self.done = False
         return self._get_observation()
     
@@ -72,8 +72,8 @@ class Invader(gym.Env):
 
     def _check_done(self):
         # End the game if the jet collides with an asteroid
-        for jet in self.game.jet_group:
-            if pygame.sprite.spritecollide(jet, self.game.asteroid_group, True):
+        for jet in self.screen.jet_group:
+            if pygame.sprite.spritecollide(jet, self.screen.asteroid_group, True):
                 return True
         return False
     
@@ -87,7 +87,7 @@ class Invader(gym.Env):
 
     def render(self, mode='human'):
         # Draw all game elements on the screen
-        self.game.draw()
+        self.screen.draw()
 
     def close(self):
         pygame.quit()
