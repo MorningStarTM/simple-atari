@@ -61,7 +61,7 @@ class GameScreen:
         if keys[pygame.K_d]:
             self.jet1.move_right()
         if keys[pygame.K_SPACE]:
-            self.jet1.shoot()
+            self.jet1.shoot(self.bullet_group)
 
     def run(self):
         running = True
