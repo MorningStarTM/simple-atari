@@ -84,4 +84,10 @@ class Invader(gym.Env):
         obs = pygame.transform.scale(pygame.surfarray.make_surface(obs), (64, 64))
         return pygame.surfarray.array3d(obs)
     
-    
+
+    def render(self, mode='human'):
+        # Draw all game elements on the screen
+        self.game.draw()
+
+    def close(self):
+        pygame.quit()
