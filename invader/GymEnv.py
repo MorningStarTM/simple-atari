@@ -19,7 +19,7 @@ class Invader(gym.Env):
         self.action_space = spaces.Discrete(4)
 
         # Define the observation space: resized screen to 512x512 pixels
-        self.observation_space = spaces.Box(low=0, high=255, shape=(512, 512, 3), dtype=np.uint8)
+        self.observation_space = spaces.Box(low=0, high=255, shape=(64, 64, 3), dtype=np.uint8)
 
         # Initialize game state variables
         self.done = False
@@ -76,3 +76,12 @@ class Invader(gym.Env):
             if pygame.sprite.spritecollide(jet, self.game.asteroid_group, True):
                 return True
         return False
+    
+    def _get_observation(self):
+        # Capture the screen and resize it to 512x512
+        obs = pygame.surfarray.array3d(pygame.display.get_surface())
+        obs = np.transpose(obs, (1, 0, 2))  # Convert to (HEIGHT, WIDTH, 3)
+        obs = pygame.transform.scale(pygame.surfarray.make_surface(obs), (64, 64))
+        return pygame.surfarray.array3d(obs)
+    
+    
