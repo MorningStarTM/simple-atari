@@ -3,6 +3,7 @@ import gym
 from jumper import JumpEnv
 from navigator import JetEnv
 from flappybird import FlappyBirdEnv
+from invader import Invader
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -83,7 +84,40 @@ def Flappyenv():
     env.close()
 
 
+
+def space_invader():
+    # Register the environment
+    gym.envs.registration.register(
+        id='SpaceInvader-v0',
+        entry_point='__main__:Invader',
+    )
+
+    # Create the environment
+    env = gym.make('SpaceInvader-v0')
+
+    # Example of running the environment
+    for episode in range(2):
+        observation = env.reset()
+        done = False
+        total_reward = 0
+
+        while not done:
+            # Sample a random action
+            action = env.action_space.sample()
+
+            # Step the environment
+            observation, reward, done, info = env.step(action)
+            total_reward += reward
+
+            # Render the environment
+            env.render()
+
+        print(f"Episode {episode + 1} finished with total reward: {total_reward}")
+
+    env.close()
+
+
 if __name__ == "__main__":
-    Flappyenv()
+    space_invader()
     
 
