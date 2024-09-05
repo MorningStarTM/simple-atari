@@ -12,6 +12,8 @@ class Jet(pygame.sprite.Sprite):
         self.speed = 5
         self.last_shot_time = 0
         self.shoot_cooldown = 100  
+        self.x = x
+        self.y = y
 
 
     def move_left(self):
@@ -33,3 +35,11 @@ class Jet(pygame.sprite.Sprite):
             bullet = Bullet(self.rect.centerx, self.rect.top)
             bullet_group.add(bullet)
             self.last_shot_time = current_time  
+
+    def get_rect(self):
+        jet_rect = self.image.get_rect(topleft=(self.x-5, self.y-5))
+        rotated_rect = pygame.Rect(jet_rect)
+        rotated_rect.center = jet_rect.center
+        rotated_rect.width -= 7
+        rotated_rect.height -= 7
+        return rotated_rect

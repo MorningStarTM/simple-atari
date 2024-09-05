@@ -9,7 +9,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.image = pygame.image.load(ASTEROID).convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))  # Scale as needed
         self.rect = self.image.get_rect(center=(x, y))
-        self.speed = random.randint(1, 4)
+        self.speed = random.randint(4, 10)
 
     def update(self):
         # Move asteroid down the screen
