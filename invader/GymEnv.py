@@ -57,16 +57,16 @@ class Invader(gym.Env):
         return observation, reward, self.done, {}
     
     def _calculate_reward(self):
-        # Define reward mechanism
         reward = 0
         for bullet in self.screen.bullet_group:
-            # If bullet hits an asteroid, give positive reward
             if pygame.sprite.spritecollide(bullet, self.screen.asteroid_group, True, pygame.sprite.collide_mask):
                 reward += 1
-        # Negative reward if the jet collides with an asteroid
         if self.screen.check_collision():
             reward -= 10
+        reward += 0.05  # Reward for staying alive
         return reward
+
+
 
     def _get_observation(self):
         # Capture the screen and resize it to 64x64
